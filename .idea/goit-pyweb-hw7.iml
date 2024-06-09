@@ -5,4 +5,7 @@
     <orderEntry type="jdk" jdkName="Poetry (goit-pyweb-hw7)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="C:\Users\Illia\Desktop\goit-pyweb-hw7\pyproject.toml" />
+  </component>
 </module>
