@@ -7,13 +7,13 @@ Base = declarative_base()
 class Teacher(Base):
     __tablename__ = 'teachers'
     id = Column(Integer, primary_key=True)
-    fullname = Column(String(150), nullable=False)
+    fullname = Column(String(50), nullable=False)
 
 
 class Group(Base):
     __tablename__ = 'groups'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(150), nullable=False)
 
 
 class Student(Base):
