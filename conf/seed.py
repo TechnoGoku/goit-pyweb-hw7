@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 fake = Faker("uk_UA")
 
-engine = create_engine('postgresql+psycopg2://postgres:567234@localhost@localhost/test')
+engine = create_engine('postgresql://postgres:567234@localhost/test', client_encoding='utf8')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -45,16 +45,17 @@ for group in groups:
         student = Student(fullname=fake.name(), group_id=group.id)
         session.add(student)
         session.commit()
-        for subject in subjects):
+        for subject in subjects:
             for _ in range(3):
-                grade = Grade(student_id=student.id, subjects_id = subjects.id, grade=random.randint(0, 100), grade_date = fake.date_this_decade()
-
+                grade = Grade(student_id=student.id, subjects_id=subject.id, grade=random.randint(0, 100),
+                              grade_date=fake.date_this_decade())
+                session.add(grade)
 
 try:
-    conn.commit()
-except DatabaseError as err:
+    session.commit()
+except Exception as err:
     logging.error(err)
-    conn.rollback()
+    session.rollback()
 finally:
-    cur.close()
-    conn.close()
+    session.close()
+
