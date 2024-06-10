@@ -2,17 +2,22 @@ import logging
 
 from faker import Faker
 import random
-import psycopg2
-from psycopg2 import DatabaseError
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Base, Group, Student, Teacher, Subject, Grade
+
+# import psycopg2
+# from psycopg2 import DatabaseError
 
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 fake = Faker("uk_UA")
 
+engine = create_engine('postgresql+psycopg2://postgres:567234@localhost@localhost/test')
+Session = sessionmaker(bind=engine)
+session = Session()
 
-conn = psycopg2.connect(host="localhost", database="test", user="postgres", password="567234")
-cur = conn.cursor()
 
 for _ in range(3):
     cur.execute("INSERT INTO groups (name) VALUES (%s)", (fake.word(),))
