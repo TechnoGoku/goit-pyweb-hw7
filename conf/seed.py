@@ -18,25 +18,37 @@ engine = create_engine('postgresql+psycopg2://postgres:567234@localhost@localhos
 Session = sessionmaker(bind=engine)
 session = Session()
 
+for _ in range(3):
+    group = Group(name=fake.word())
+    session.add(group)
 
 for _ in range(3):
-    cur.execute("INSERT INTO groups (name) VALUES (%s)", (fake.word(),))
+    teacher = Teacher(fullname=fake.name())
+    session.add(teacher)
 
-for _ in range(3):
-    cur.execute("INSERT INTO teachers (fullname) VALUES (%s)", (fake.name(),))
+session.commit()
 
-for teacher_id in range(1, 4):
+teachers = session.query(Teacher).all()
+groups = session.query(Group).all()
+
+for teacher in teachers:
     for _ in range(2):
-        cur.execute("INSERT INTO subjects (name, teacher_id) VALUES (%s, %s)", (fake.word(), teacher_id))
+        subjects = Subject(name=fake.word(), teacher_id=teacher.id)
+        session.add(subjects)
 
-for group_id in range(1, 4):
+session.commit()
+
+subjects = session.query(Subject).all()
+
+for group in groups:
     for _ in range(10):
-        cur.execute("INSERT INTO students (fullname, group_id) VALUES (%s, %s) RETURNING id", (fake.name(), group_id))
-        student_id = cur.fetchone()[0]
-        for subject_id in range(1, 7):
+        student = Student(fullname=fake.name(), group_id=group.id)
+        session.add(student)
+        session.commit()
+        for subject in subjects):
             for _ in range(3):
-                cur.execute("INSERT INTO grades (student_id, subject_id, grade, grade_date) VALUES (%s, %s, %s, %s)",
-                            (student_id, subject_id, random.randint(0, 100), fake.date_this_decade()))
+                grade = Grade(student_id=student.id, subjects_id = subjects.id, grade=random.randint(0, 100), grade_date = fake.date_this_decade()
+
 
 try:
     conn.commit()
