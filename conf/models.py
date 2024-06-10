@@ -33,6 +33,7 @@ class Subject(Base):
 
 
 class Grade(Base):
+    subject_id = None
     __tablename__ = 'grades'
     id = Column(Integer, primary_key=True)
     grade = Column(Integer, nullable=False)
