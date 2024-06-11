@@ -1,7 +1,11 @@
-from sqlalchemy import func, desc, select, and_
-
+from sqlalchemy import func, desc, select, and_, create_engine
+from sqlalchemy.orm import sessionmaker
 from conf.models import Grade, Group, Teacher, Student, Subject
 from conf.db import session
+
+engine = create_engine('postgresql://postgres:567234@localhost/test', client_encoding='utf8')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 def select_01():
@@ -61,16 +65,17 @@ def select_03():
     """
     result = session.query(Group.name.label("group_name"),
                            func.avg(Grade.grade).label("average_grade")
-                           ).join(Student, Student.group_id == Group.id) \
-                            .join(Grade, Grade.student_id == Student.id) \
-                            .join(Subject, Subject.id == Grade.subject_id) \
-                            .filter(Subject.id == 1) \
-                            .group_by(Group.name) \
-                            .all()
+                           ).join(Student, Grade.student_id == Student.id) \
+        .join(Group, Student.group_id == Group.id) \
+        .join(Subject, Grade.subject_id == Subject.id) \
+        .filter(Subject.id == 1) \
+        .group_by(Group.name) \
+        .all()
     return result
 
-def select_04():
 
+def select_04():
+    pass
 
 
 if __name__ == '__main__':
