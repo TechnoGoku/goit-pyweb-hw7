@@ -198,11 +198,15 @@ def select_10():
     JOIN
         teachers ON subjects.teacher_id = teachers.id
     WHERE
-        students.id = 1  -- Замените 1 на нужный id студента
-        AND teachers.id = 2;  -- Замените 2 на нужный id преподавателя
+        students.id = 1 -- Замените 1 на нужный id студента
+        AND teachers.id = 2; -- Замените 2 на нужный id преподавателя
     """
-
-
+    result = session.query(Subject.name) \
+        .join(Grade, Subject.id == Grade.subjects_id) \
+        .join(Student, Grade.student_id == Student.id) \
+        .join(Teacher, Subject.teacher_id == Teacher.id) \
+        .filter(Student.id == 1, Teacher.id == 1).all()
+    return result
 
 
 if __name__ == '__main__':
