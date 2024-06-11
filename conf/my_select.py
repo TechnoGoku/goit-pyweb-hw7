@@ -1,11 +1,27 @@
 from sqlalchemy import func, desc, select, and_, create_engine
 from sqlalchemy.orm import sessionmaker
-from conf.models import Grade, Group, Teacher, Student, Subject
+from conf.models import Base, Grade, Group, Teacher, Student, Subject
 from conf.db import session
 
 engine = create_engine('postgresql://postgres:567234@localhost/test', client_encoding='utf8')
 Session = sessionmaker(bind=engine)
 session = Session()
+
+# Проверка существования предмета с id=1
+# subject_exists = session.query(Subject).filter(Subject.id == 1).first()
+# if subject_exists:
+#     print(f"Subject with id=1 exists: {subject_exists.name}")
+# else:
+#     print("Subject with id=1 does not exist")
+#
+# # Проверка наличия оценок по предмету с id=1
+# grades_for_subject = session.query(Grade).filter(Grade.subjects_id == 1).count()
+# print(f"Number of grades for subject with id=1: {grades_for_subject}")
+#
+# # Проверка существования групп, у которых студенты имеют оценки по предмету с id=1
+# groups_with_grades_for_subject = session.query(Group.name, func.avg(Grade.grade)).join(Student).join(Grade).filter(
+#     Grade.subject_id == 1).group_by(Group.name).all()
+# print(f"Groups with grades for subject with id=1: {groups_with_grades_for_subject}")
 
 
 def select_01():
@@ -65,9 +81,9 @@ def select_03():
     """
     result = session.query(Group.name.label("group_name"),
                            func.avg(Grade.grade).label("average_grade")
-                           ).join(Student, Grade.student_id == Student.id) \
-        .join(Group, Student.group_id == Group.id) \
-        .join(Subject, Grade.subject_id == Subject.id) \
+                           ).select_from(Grade).join(Student, Student.id == Grade.student_id) \
+        .join(Group, Group.id == Student.group_id) \
+        .join(Subject, Subject.id == Grade.subjects_id) \
         .filter(Subject.id == 1) \
         .group_by(Group.name) \
         .all()

@@ -29,11 +29,11 @@ class Subject(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(175), nullable=False)
     teacher_id = Column('teacher_id', ForeignKey('teachers.id', ondelete='CASCADE'))
-    teacher = relationship('Teacher', backref='disciplines')
+    teacher = relationship('Teacher', backref='discipline')
+    # grades = relationship('Grade', backref='subject')
 
 
 class Grade(Base):
-    subject_id = None
     __tablename__ = 'grades'
     id = Column(Integer, primary_key=True)
     grade = Column(Integer, nullable=False)
