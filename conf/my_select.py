@@ -7,22 +7,6 @@ engine = create_engine('postgresql://postgres:567234@localhost/test', client_enc
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Проверка существования предмета с id=1
-# subject_exists = session.query(Subject).filter(Subject.id == 1).first()
-# if subject_exists:
-#     print(f"Subject with id=1 exists: {subject_exists.name}")
-# else:
-#     print("Subject with id=1 does not exist")
-#
-# # Проверка наличия оценок по предмету с id=1
-# grades_for_subject = session.query(Grade).filter(Grade.subjects_id == 1).count()
-# print(f"Number of grades for subject with id=1: {grades_for_subject}")
-#
-# # Проверка существования групп, у которых студенты имеют оценки по предмету с id=1
-# groups_with_grades_for_subject = session.query(Group.name, func.avg(Grade.grade)).join(Student).join(Grade).filter(
-#     Grade.subject_id == 1).group_by(Group.name).all()
-# print(f"Groups with grades for subject with id=1: {groups_with_grades_for_subject}")
-
 
 def select_01():
     """
@@ -91,7 +75,29 @@ def select_03():
 
 
 def select_04():
-    pass
+    """
+    SELECT
+        AVG(grade) AS average_grade
+    FROM
+        grades;
+
+    """
+    result = session.query(func.avg(Grade.grade).label('average_grade')).scalar()
+    return result
+
+
+def select_05():
+    """
+    SELECT
+    subjects.name AS subject_name
+FROM
+    subjects
+JOIN
+    teachers ON subjects.teacher_id = teachers. id
+WHERE
+    teachers.id = 1;
+    """
+
 
 
 if __name__ == '__main__':
@@ -100,3 +106,7 @@ if __name__ == '__main__':
     print(select_02())
     print('---------------')
     print(select_03())
+    print('---------------')
+    print(select_04())
+    print('---------------')
+    print(select_05())
