@@ -97,16 +97,16 @@ JOIN
 WHERE
     teachers.id = 1;
     """
-
-
+    result = session.query(Subject.name).join(Teacher, Subject.teacher_id == Teacher.id).filter(Teacher.id == 1).all()
+    return result
 
 if __name__ == '__main__':
-    print(select_01())
+    print(f"query_1: {select_01()}")
     print('---------------')
-    print(select_02())
+    print(f"query_2: {select_02()}")
     print('---------------')
-    print(select_03())
+    print(f"query_3: {select_03()}")
     print('---------------')
-    print(select_04())
+    print(f"query_4: {select_04()}")
     print('---------------')
-    print(select_05())
+    print(f"query_5: {select_05()}")
