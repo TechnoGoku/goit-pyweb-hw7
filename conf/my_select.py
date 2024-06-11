@@ -205,7 +205,7 @@ def select_10():
         .join(Grade, Subject.id == Grade.subjects_id) \
         .join(Student, Grade.student_id == Student.id) \
         .join(Teacher, Subject.teacher_id == Teacher.id) \
-        .filter(Student.id == 1, Teacher.id == 1).all()
+        .filter(Student.id == 1, Teacher.id == 2).all()
     return result
 
 
