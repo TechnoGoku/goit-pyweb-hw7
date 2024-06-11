@@ -100,6 +100,55 @@ WHERE
     result = session.query(Subject.name).join(Teacher, Subject.teacher_id == Teacher.id).filter(Teacher.id == 1).all()
     return result
 
+
+def select_06(group_id=None):
+    """
+    SELECT
+        students.id,
+        students.fullname
+    FROM
+        students
+    WHERE
+        students.group_id = 2;  -- Замените 1 на нужный id группы
+
+    """
+    result = session.query(Student.id, Student.fullname).filter(Student.group_id == group_id).all()
+    return result
+
+
+def select_07():
+    """
+    SELECT
+        students.fullname AS student_name,
+        grades.grade,
+        grades.grade_date
+    FROM
+        grades
+    JOIN
+        students ON grades.student_id = students.id
+    JOIN
+        subjects ON grades.subject_id = subjects.id
+    JOIN
+        groups ON students.group_id = groups.id
+    WHERE
+        groups.id = 1
+        AND subjects.id = 1;
+    """
+    result = session.query(Student.fullname.label("student_name"),
+                           Grade.grade,
+                           Grade.grade_date) \
+        .join(Grade, Student.id == Grade.student_id) \
+        .join(Subject, Grade.subjects_id == Subject.id) \
+        .join(Group, Student.group_id == Group.id) \
+        .filter(Group.id == 1) \
+        .filter(Subject.id == 1).all()
+    return result
+
+def select_08():
+    """
+
+    """
+
 if __name__ == '__main__':
     print(f"query_1: {select_01()}")
     print('---------------')
@@ -110,3 +159,7 @@ if __name__ == '__main__':
     print(f"query_4: {select_04()}")
     print('---------------')
     print(f"query_5: {select_05()}")
+    print('---------------')
+    print(f"query_6: {select_06(2)}")  # введіть id групи
+    print('---------------')
+    print(f"query_7: {select_07()}")
